@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+src/rtk_hermes/__init__.py
+src/rtk_hermes.egg-info/PKG-INFO
+src/rtk_hermes.egg-info/SOURCES.txt
+src/rtk_hermes.egg-info/dependency_links.txt
+src/rtk_hermes.egg-info/entry_points.txt
+src/rtk_hermes.egg-info/top_level.txt
+tests/test_plugin.py
