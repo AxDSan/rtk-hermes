@@ -1,2 +1,0 @@
-[hermes_agent.plugins]
-rtk-rewrite = rtk_hermes:register
