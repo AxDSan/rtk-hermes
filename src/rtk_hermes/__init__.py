@@ -39,7 +39,16 @@ def _check_rtk() -> bool:
 
 
 def _try_rewrite(command: str) -> Optional[str]:
-    """Delegate to `rtk rewrite` and return the rewritten command, or None."""
+    """Delegate to `rtk rewrite` and return the rewritten command, or None.
+
+    RTK exit code protocol (src/hooks/rewrite_cmd.rs):
+      0 = rewrite allowed (auto-allow)
+      1 = no RTK equivalent (passthrough)
+      2 = deny rule matched
+      3 = ask rule matched — rewrite exists but needs confirmation
+
+    Both 0 and 3 produce valid rewritten output on stdout.
+    """
     try:
         result = subprocess.run(
             ["rtk", "rewrite", command],
@@ -48,7 +57,8 @@ def _try_rewrite(command: str) -> Optional[str]:
             timeout=2,
         )
         rewritten = result.stdout.strip()
-        if result.returncode == 0 and rewritten and rewritten != command:
+        # Accept exit 0 (allow) and 3 (ask) as successful rewrites
+        if result.returncode in (0, 3) and rewritten and rewritten != command:
             return rewritten
         return None
     except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
